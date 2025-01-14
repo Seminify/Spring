@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.seminify.application.mapper.RoomMapper">
+    <resultMap id="RoomVO" type="org.seminify.application.model.vo.RoomVO">
+        <id column="room_id" property="id" />
+        <result column="room_name" property="name" />
+        <result column="room_square_meter" property="squareMeter" />
+        <result column="room_stay_id" property="stayId" />
+        <association property="stay" javaType="org.seminify.application.model.Stay">
+            <id column="stay_id" property="id" />
+            <result column="stay_name" property="name" />
+        </association>
+    </resultMap>
+    <select id="findAll" resultMap="RoomVO">
+    <![CDATA[
+SELECT
+    room.id AS room_id,
+    room.name AS room_name,
+    room.square_meter AS room_square_meter,
+    room.stay_id AS room_stay_id,
+    stay.id AS stay_id,
+    stay.name AS stay_name
+FROM
+    (
+        SELECT
+            *
+        FROM
+            room
+        LIMIT
+            #{pageable.offset}, #{pageable.pageSize}
+    ) AS room
+    JOIN stay ON room.stay_id = stay.id
+WHERE
+    room.stay_id = #{roomDTO.stayId}
+    ]]>
+    </select>
+    <select id="count">
+    <![CDATA[
+SELECT
+    COUNT(*)
+FROM
+    room
+WHERE
+    stay_id = #{stayId}
+    ]]>
+    </select>
+</mapper>

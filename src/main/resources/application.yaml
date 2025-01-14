@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: application
+  datasource:
+    url: jdbc:mysql://localhost/application
+    username: root
+    password: MYSQL_ROOT_PASSWORD
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        highlight_sql: true
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+  mapper-locations: classpath:mapper/*.xml
